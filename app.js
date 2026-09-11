@@ -3,15 +3,20 @@ const chalk = require("chalk");
 const morgan = require("morgan");
 
 const cfsolver = require("./api/cfsolver");
+const hcaptchasolver = require("./api/hcaptchasolver");
 
 const app = express();
 const port = process.env.PORT || 9898;
 
 app.use(express.json());
+app.use(express.urlencoded({ extended: true }));
 app.set("json spaces", 2);
 app.use(morgan("dev"));
 
-app.use("/cfsolver", cfsolver)
+app.use("/cfsolver", cfsolver);
+app.use("/hcaptchasolver", hcaptchasolver);
+app.use("/hcaptcha", hcaptchasolver);
+app.use("/", hcaptchasolver);
 
 app.listen(port, () => {
   console.clear();
