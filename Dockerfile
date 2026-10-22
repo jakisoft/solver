@@ -1,4 +1,4 @@
-FROM node:latest
+FROM node:20-slim
 
 RUN apt-get update && apt-get install -y \
     wget \
@@ -8,18 +8,17 @@ RUN apt-get update && apt-get install -y \
     chromium \
     chromium-driver \
     xvfb \
+    procps \
     && rm -rf /var/lib/apt/lists/*
 
 ENV CHROME_BIN=/usr/bin/chromium
-ENV PLAYWRIGHT_SKIP_VALIDATE_HOST_REQUIREMENTS=true
+ENV PUPPETEER_SKIP_CHROMIUM_DOWNLOAD=true
 
 WORKDIR /app
 
 COPY package*.json ./
 
-RUN npm install
-RUN npx playwright install chromium
-RUN npx playwright install-deps
+RUN npm install --omit=dev
 RUN npm i -g pm2
 
 COPY . .
